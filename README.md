@@ -35,21 +35,21 @@ import ReactDraggable from 'react-draggable';
 ```
 
 ## props
-**additionalClass {String}** - A string of additional classnames to add to the element
-**bounds {Object}** - An array of coordinates, forming a square, that the user cannot drag the component outside of, in the format {x1: Number, y1: Number, x2: Number, y2: Number}
-**contentPosition {String}** - The css positioning for for the element ('absolute' or 'fixed', defaults to 'absolute')
-**dragCallback {Function}** - The function to call while the user is dragging
-**dragStartCallback {Function}** - The function to call when the user starts dragging
-**dragStopCallback {Function}** - The function to call when the user stops dragging
-**dragLeaveCallback {Function}** - A function to call when the user is dragging and the mouse/touch leaves the draggable component
-**initialPosition {Object}** - An object with initial x and y values for the content
-**lock {String}** - An axis to lock element to when dragging, either 'x' or 'y'
-**preventDefaultEvents {Boolean}** - Whether to prevent default mouse/touch events
-**touchScrollLock {String}** - If set to true, prevents the content from being dragged if the user is scrolling in the opposite direction on a touchend device
-**translate3d {Boolean}** - Whether to use css3 transform3d for positioning
+**additionalClass {String}** - A string of additional classnames to add to the element  
+**bounds {Object}** - An array of coordinates, forming a square, that the user cannot drag the component   outside of, in the format {x1: Number, y1: Number, x2: Number, y2: Number}  
+**contentPosition {String}** - The css positioning for for the element ('absolute' or 'fixed', defaults to 'absolute')  
+**dragCallback {Function}** - The function to call while the user is dragging  
+**dragStartCallback {Function}** - The function to call when the user starts dragging  
+**dragStopCallback {Function}** - The function to call when the user stops dragging  
+**dragLeaveCallback {Function}** - A function to call when the user is dragging and the mouse/touch leaves the draggable component  
+**initialPosition {Object}** - An object with initial x and y values for the content  
+**lock {String}** - An axis to lock element to when dragging, either 'x' or 'y'  
+**preventDefaultEvents {Boolean}** - Whether to prevent default mouse/touch events  
+**touchScrollLock {String}** - If set to true, prevents the content from being dragged if the user is scrolling in the opposite direction on a touchend device  
+**translate3d {Boolean}** - Whether to use css3 transform3d for positioning  
 
 ## methods
-**setEnabled({Boolean})** - Sets the whether the draggability is enabled
-**setStyle({Object})** - Sets the style of the component
-**setPosition({Object})** - Sets the position of the component with an object passed in format {x: Number, y: number}
-**getPosition()** - Gets the current x and y position of the component
+**setEnabled({Boolean})** - Sets the whether the draggability is enabled  
+**setStyle({Object})** - Sets the style of the component  
+**setPosition({Object})** - Sets the position of the component with an object passed in format {x: Number, y: number}  
+**getPosition()** - Gets the current x and y position of the component  

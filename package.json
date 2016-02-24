@@ -1,5 +1,5 @@
 {
-  "name": "react-draggable",
+  "name": "react-draggable-component",
   "version": "1.0.0",
   "description": "A wrapper React component that adds draggable functionality to an element",
   "main": "index.js",
