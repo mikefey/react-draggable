@@ -1,9 +1,9 @@
-# react-responsive-image
+# react-draggable-component
 A wrapper React component that adds draggable functionality to an element. Uses transform values with the option to use transform3d. Works with touch devices.
 
 ## to install
 ```
-npm i react-draggable
+npm i react-draggable-component
 ```
 
 ## to run demo
