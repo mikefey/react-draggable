@@ -27,7 +27,7 @@ npm run build
 import ReactDraggable from 'react-draggable';
 
 <Draggable
-  supportsCssTransforms3d={supportsCssTransforms3d}
+  supportsCssTransforms3d
 >
   <div className='draggable-content'>DRAG</div>
 </Draggable>
