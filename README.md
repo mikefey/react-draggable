@@ -25,6 +25,7 @@ npm run build
 ## usage
 ```
 import React from 'react';
+import ReactDOM from 'react-dom';
 import ReactDraggable from 'react-draggable';
 
 <Draggable
