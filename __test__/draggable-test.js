@@ -34,7 +34,7 @@ test('Draggable component: Should return an element with the className ' +
 
     const componentClassName = ReactDOM.findDOMNode(component).className;
 
-    assert.equal(componentClassName, 'component-draggable');
+    assert.equal(componentClassName, 'component-draggable ');
     ReactDOM.unmountComponentAtNode(document);
     assert.end();
   });
@@ -111,7 +111,7 @@ test('Draggable component: translate x style should update when dragged' +
     eventHelper.dispatchEvent(document, mouseUpEvent);
 
     assert.equal(node.firstChild.style.WebkitTransform,
-      'translate(-300px, 0px)');
+      'translate3d(-300px, 0px, 0px)');
     ReactDOM.unmountComponentAtNode(document);
     assert.end();
   });
@@ -151,7 +151,7 @@ test('Draggable component: translate y style should update when dragged' +
     eventHelper.dispatchEvent(document, mouseUpEvent);
 
     assert.equal(node.firstChild.style.WebkitTransform,
-      'translate(0px, -300px)');
+      'translate3d(0px, -300px, 0px)');
     ReactDOM.unmountComponentAtNode(document);
     assert.end();
   });
@@ -191,7 +191,7 @@ test('Draggable component: component should not be able to be dragged on' +
     eventHelper.dispatchEvent(document, mouseUpEvent);
 
     assert.equal(node.firstChild.style.WebkitTransform,
-      'translate(-300px, 0px)');
+      'translate3d(-300px, 0px, 0px)');
     ReactDOM.unmountComponentAtNode(document);
     assert.end();
   });
@@ -231,7 +231,7 @@ test('Draggable component: component should not be able to be dragged on' +
     eventHelper.dispatchEvent(document, mouseUpEvent);
 
     assert.equal(node.firstChild.style.WebkitTransform,
-      'translate(0px, -300px)');
+      'translate3d(0px, -300px, 0px)');
     ReactDOM.unmountComponentAtNode(document);
     assert.end();
   });
@@ -274,50 +274,7 @@ test('Draggable component: component should not be able to be dragged outside' +
     eventHelper.dispatchEvent(document, mouseUpEvent);
 
     assert.equal(node.firstChild.style.WebkitTransform,
-      'translate(-300px, 0px)');
-    ReactDOM.unmountComponentAtNode(document);
-    assert.end();
-  });
-
-
-test('Draggable component: component should use translate3d when the ' +
-  ' translate3d prop is set to true',
-  (assert) => {
-    const component = ReactTestUtils.renderIntoDocument(
-      <Draggable
-        translate3d
-        lock={'x'}
-      >
-        <div className='child'>
-          <div className='inner' />
-        </div>
-      </Draggable>
-    );
-
-    const mouseDownEvent = {
-      type: 'mousedown',
-      clientX: 0,
-      clientY: 0,
-      changedTouches: [
-        {
-          clientX: 0,
-          clientY: 0,
-        },
-      ],
-    };
-
-    const mouseMoveEvent =
-      eventHelper.createEvent('MouseEvents', 'mousemove', 0, 0, -400, 0);
-    const mouseUpEvent =
-      eventHelper.createEvent('MouseEvents', 'mouseup', 0, 0, -400, 0);
-    const node = ReactDOM.findDOMNode(component);
-
-    ReactTestUtils.Simulate.mouseDown(node, mouseDownEvent);
-    eventHelper.dispatchEvent(document, mouseMoveEvent);
-    eventHelper.dispatchEvent(document, mouseUpEvent);
-
-    assert.equal(node.firstChild.style.WebkitTransform,
-      'translate3d(-400px, 0px, 0px)');
+      'translate3d(-300px, 0px, 0px)');
     ReactDOM.unmountComponentAtNode(document);
     assert.end();
   });
