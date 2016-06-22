@@ -16,6 +16,7 @@ class Draggable extends React.Component {
     // initial state object
     this.state = {
       pos: this.props.initialPosition || { x: 0, y: 0 },
+      dragging: false,
       enabled: true,
       elementStyle: {
         position: this.props.cssPosition || 'absolute',
@@ -35,7 +36,7 @@ class Draggable extends React.Component {
 
 
     // bind functions to component
-    this.renderChildren = this.renderChildren.bind(this);
+    this.renderChild = this.renderChild.bind(this);
     this.enable = this.enable.bind(this);
     this.disable = this.disable.bind(this);
     this.setStyle = this.setStyle.bind(this);
@@ -46,6 +47,17 @@ class Draggable extends React.Component {
     this.onDrag = this.onDrag.bind(this);
     this.onDragStop = this.onDragStop.bind(this);
     this.onDragLeave = this.onDragLeave.bind(this);
+  }
+
+
+  /**
+   * Called before component mounts to DOM
+   * @returns {undefined} undefined
+   */
+  componentWillMount() {
+    if (this.props.initialPosition) {
+      this.positionContent();
+    }
   }
 
 
@@ -80,7 +92,7 @@ class Draggable extends React.Component {
   render() {
     const additionalClass = this.props.additionalClass || '';
     const className = 'component-draggable ' + additionalClass;
-    const children = this.renderChildren();
+    const children = this.renderChild();
 
     return (
       <div
@@ -96,7 +108,11 @@ class Draggable extends React.Component {
   }
 
 
-  renderChildren() {
+  /**
+   * Renders the child element
+   * @returns {Object} React element
+   */
+  renderChild() {
     const inst = this;
 
     return React.Children.map(this.props.children, (child) => {
@@ -115,6 +131,7 @@ class Draggable extends React.Component {
       newStyle = Object.assign(childStyle, elementStyle);
 
       return React.cloneElement(child, {
+        dragging: this.state.dragging,
         style: newStyle,
         ref: 'draggableChild',
       });
@@ -275,6 +292,14 @@ class Draggable extends React.Component {
       }
     }
 
+    if (this.props.lock === 'x') {
+      newPos.y = this.state.dragStartElementPos.y;
+    }
+
+    if (this.props.lock === 'y') {
+      newPos.x = this.state.dragStartElementPos.x;
+    }
+
     return newPos;
   }
 
@@ -284,8 +309,8 @@ class Draggable extends React.Component {
    * @returns {undefined} undefined
    */
   positionContent() {
-    const xPos = !(this.props.lock === 'x') ? this.state.pos.x + 'px' : '0px';
-    const yPos = !(this.props.lock === 'y') ? this.state.pos.y + 'px' : '0px';
+    const xPos = this.state.pos.x + 'px';
+    const yPos = this.state.pos.y + 'px';
     const positionTransformString = 'translate3d(' + xPos + ',' + yPos + ', 0px)';
     const transformStyle = {
       msTransform: positionTransformString,
@@ -374,6 +399,7 @@ class Draggable extends React.Component {
         const newPos = this.getNewPosition(pageX, pageY);
 
         this.setState({
+          dragging: true,
           pos: newPos,
         }, () => {
           this.positionContent();
@@ -409,6 +435,7 @@ class Draggable extends React.Component {
       }
 
       this.setState({
+        dragging: false,
         scrollLocked: false,
         dragLocked: false,
       });
@@ -429,13 +456,15 @@ class Draggable extends React.Component {
    * @returns {undefined} undefined
    */
   onDragLeave() {
-    if (this.state.dragging && this.props.dragLeaveCallback) {
+    if (this.state.dragging) {
       this.setState({
         scrollLocked: false,
         dragLocked: false,
       });
 
-      this.props.dragLeaveCallback();
+      if (this.props.dragLeaveCallback) {
+        this.props.dragLeaveCallback();
+      }
     }
   }
 }
@@ -450,14 +479,14 @@ class Draggable extends React.Component {
  * @prop {Object} children - Child React elements
  * @prop {String} cssPosition - The css positioning for for the element
  * (i.e. 'absolute' or 'fixed', defaults to 'absolute')
- * @prop {Function} dragCallback - The function to call while the user is
+ * @prop {Function} dragCallback - A callback function while the user is
  * dragging
- * @prop {Function} dragStartCallback - The function to call when the user
- * starts dragging
- * @prop {Function} dragStopCallback - The function to call when the user
+ * @prop {Function} dragStartCallback - A callback function for when the user
  * stops dragging
- * @prop {Function} dragLeaveCallback - A function to call when the user is
- * dragging and the mouse/touch leaves the draggable component
+ * @prop {Function} dragStopCallback - A callback function for when the user
+ * stops dragging
+ * @prop {Function} dragLeaveCallback - A callback function for when the user
+ * is dragging and the mouse/touch leaves the draggable component
  * @prop {Object} initialPosition - An object with initial x and y values for
  * the content
  * @prop {String} lock - An axis to lock element to when dragging, either
