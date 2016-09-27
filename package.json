@@ -1,14 +1,13 @@
 {
   "name": "react-draggable-component",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "A wrapper React component that adds draggable functionality to an element",
   "main": "index.js",
   "author": "Mike Fey",
   "license": "ISC",
-  "repository" :
-  {
-    "type" : "git",
-    "url" : "https://github.com/mikefey/react-draggable"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mikefey/react-draggable"
   },
   "scripts": {
     "test": "./node_modules/karma/bin/karma start",
@@ -47,9 +46,9 @@
     "phantomjs-prebuilt": "^2.1.3",
     "postcss-loader": "^0.8.0",
     "precss": "^1.4.0",
-    "react": "^0.14.7",
-    "react-addons-test-utils": "^0.14.7",
-    "react-dom": "^0.14.7",
+    "react": "^15.3.2",
+    "react-addons-test-utils": "^15.3.2",
+    "react-dom": "^15.3.2",
     "react-hot-loader": "^1.3.0",
     "react-unit": "^1.1.1",
     "sass-loader": "^3.1.2",

@@ -98,7 +98,7 @@ class Draggable extends React.Component {
       <div
         className={className}
         onTouchStart={this.onDragStart}
-        onTouchLeave={this.onDragLeave}
+        onTouchCancel={this.onDragLeave}
         onMouseDown={this.onDragStart}
         onDragLeave={this.onDragLeave}
       >
@@ -131,7 +131,6 @@ class Draggable extends React.Component {
       newStyle = Object.assign(childStyle, elementStyle);
 
       return React.cloneElement(child, {
-        dragging: this.state.dragging,
         style: newStyle,
         ref: 'draggableChild',
       });
