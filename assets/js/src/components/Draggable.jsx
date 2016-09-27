@@ -4,7 +4,6 @@ class Draggable extends React.Component {
   constructor(props) {
     super(props);
 
-
     // used by React as the component name
     this.displayName = 'Draggable';
 
@@ -17,7 +16,6 @@ class Draggable extends React.Component {
     this.state = {
       pos: this.props.initialPosition || { x: 0, y: 0 },
       dragging: false,
-      enabled: true,
       elementStyle: {
         position: this.props.cssPosition || 'absolute',
       },
@@ -37,9 +35,6 @@ class Draggable extends React.Component {
 
     // bind functions to component
     this.renderChild = this.renderChild.bind(this);
-    this.enable = this.enable.bind(this);
-    this.disable = this.disable.bind(this);
-    this.setStyle = this.setStyle.bind(this);
     this.setPosition = this.setPosition.bind(this);
     this.getPosition = this.getPosition.bind(this);
     this.positionContent = this.positionContent.bind(this);
@@ -128,34 +123,12 @@ class Draggable extends React.Component {
         elementStyle = inst.state.elementStyle;
       }
 
-      newStyle = Object.assign(childStyle, elementStyle);
+      newStyle = Object.assign(childStyle, elementStyle, this.props.style);
 
       return React.cloneElement(child, {
         style: newStyle,
         ref: 'draggableChild',
       });
-    });
-  }
-
-
-  /**
-   * Enables othe element's draggability
-   * @returns {undefined} undefined
-   */
-  enable() {
-    this.setState({
-      enabled: true,
-    });
-  }
-
-
-  /**
-   * Disables the element's draggability
-   * @returns {undefined} undefined
-   */
-  disable() {
-    this.setState({
-      enabled: false,
     });
   }
 
@@ -337,7 +310,7 @@ class Draggable extends React.Component {
   onDragStart(e) {
     this.mouseDownOnElement = true;
 
-    if (this.state.enabled) {
+    if (!this.props.disabled) {
       let pageX = e.clientX;
       let pageY = e.clientY;
 
@@ -381,7 +354,7 @@ class Draggable extends React.Component {
    * @returns {undefined} undefined
    */
   onDrag(e) {
-    if (this.mouseDownOnElement) {
+    if (this.mouseDownOnElement && !this.props.disabled) {
       let pageX = e.clientX;
       let pageY = e.clientY;
 
@@ -424,7 +397,7 @@ class Draggable extends React.Component {
    */
   onDragStop(e) {
     if (this.mouseDownOnElement &&
-      this.state.enabled &&
+      !this.props.disabled &&
       !this.mouseDownWhileDisabled) {
       if (this.props.dragStopCallback && !this.state.scrollLocked) {
         this.props.dragStopCallback({
@@ -478,6 +451,7 @@ class Draggable extends React.Component {
  * @prop {Object} children - Child React elements
  * @prop {String} cssPosition - The css positioning for for the element
  * (i.e. 'absolute' or 'fixed', defaults to 'absolute')
+ * @prop {Boolean} disabled - If the component is disabled
  * @prop {Function} dragCallback - A callback function while the user is
  * dragging
  * @prop {Function} dragStartCallback - A callback function for when the user
@@ -492,6 +466,7 @@ class Draggable extends React.Component {
  * 'x' or 'y'
  * @prop {Boolean} preventDefaultEvents - Whether to prevent default
  * mouse/touch events
+ * @prop {Object} style - A style object
  * @prop {String} touchScrollLock - If set to true, prevents the content from
  * being dragged if the user is scrolling in the opposite direction on a touch
  * device
@@ -509,6 +484,7 @@ Draggable.propTypes = {
     React.PropTypes.object,
   ]).isRequired,
   cssPosition: React.PropTypes.string,
+  disabled: React.PropTypes.bool,
   dragCallback: React.PropTypes.func,
   dragLeaveCallback: React.PropTypes.func,
   dragStartCallback: React.PropTypes.func,
@@ -516,6 +492,7 @@ Draggable.propTypes = {
   initialPosition: React.PropTypes.object,
   lock: React.PropTypes.string,
   preventDefaultEvents: React.PropTypes.bool,
+  style: React.PropTypes.object,
   touchScrollLock: React.PropTypes.bool,
 };
 

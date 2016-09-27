@@ -75,6 +75,31 @@ test('Draggable component: Should set the css position',
   });
 
 
+test('Draggable component: Should add css when style object is passed as ' +
+  'a prop',
+  (assert) => {
+    const style = {
+      width: 200,
+      height: 100,
+    };
+
+    const component = ReactTestUtils.renderIntoDocument(
+      <Draggable style={style}>
+        <div className='child'>
+          <div className='inner' />
+        </div>
+      </Draggable>
+    );
+
+    const node = ReactDOM.findDOMNode(component);
+
+    assert.equal(node.firstChild.style.width, '200px');
+    assert.equal(node.firstChild.style.height, '100px');
+    ReactDOM.unmountComponentAtNode(document);
+    assert.end();
+  });
+
+
 test('Draggable component: Should render an additional className',
   (assert) => {
     const component = ReactTestUtils.renderIntoDocument(
@@ -269,6 +294,46 @@ test('Draggable component: component should not be able to be dragged on' +
 
     assert.equal(node.firstChild.style.WebkitTransform,
       'translate3d(0px, -300px, 0px)');
+    ReactDOM.unmountComponentAtNode(document);
+    assert.end();
+  });
+
+
+test('Draggable component: component should not be able to be dragged if' +
+  ' the disabled prop is set to true',
+  (assert) => {
+    const component = ReactTestUtils.renderIntoDocument(
+      <Draggable disabled>
+        <div className='child'>
+          <div className='inner' />
+        </div>
+      </Draggable>
+    );
+
+    const mouseDownEvent = {
+      type: 'mousedown',
+      clientX: 0,
+      clientY: 0,
+      changedTouches: [
+        {
+          clientX: 0,
+          clientY: 0,
+        },
+      ],
+    };
+
+    const mouseMoveEvent =
+      eventHelper.createEvent('MouseEvents', 'mousemove', 0, 0, -150, -300);
+    const mouseUpEvent =
+      eventHelper.createEvent('MouseEvents', 'mouseup', 0, 0, -150, -300);
+    const node = ReactDOM.findDOMNode(component);
+
+    ReactTestUtils.Simulate.mouseDown(node, mouseDownEvent);
+    eventHelper.dispatchEvent(document, mouseMoveEvent);
+    eventHelper.dispatchEvent(document, mouseUpEvent);
+
+    assert.equal(node.firstChild.style.WebkitTransform,
+      '');
     ReactDOM.unmountComponentAtNode(document);
     assert.end();
   });
