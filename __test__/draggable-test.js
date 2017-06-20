@@ -103,7 +103,7 @@ test('Draggable component: Should add css when style object is passed as ' +
 test('Draggable component: Should render an additional className',
   (assert) => {
     const component = ReactTestUtils.renderIntoDocument(
-      <Draggable lock={'x'} additionalClass={'additional-class'}>
+      <Draggable lock={'x'} className={'additional-class'}>
         <div className='child'>
           <div className='inner' />
         </div>
@@ -119,11 +119,10 @@ test('Draggable component: Should render an additional className',
   });
 
 
-test('Draggable component: Should render an the component with an initial' +
-  'position',
+test('Draggable component: Should render an the component with a position',
   (assert) => {
     const component = ReactTestUtils.renderIntoDocument(
-      <Draggable initialPosition={{ x: 50, y: 100 }}>
+      <Draggable position={{ x: 50, y: 100 }}>
         <div className='child'>
           <div className='inner' />
         </div>
@@ -521,7 +520,7 @@ test('Draggable component: component should not be draggable when the user is' +
   (assert) => {
     const component = ReactTestUtils.renderIntoDocument(
       <Draggable
-        initialPosition={{ x: 10, y: 10 }}
+        position={{ x: 10, y: 10 }}
         touchScrollLock
         lock={'x'}
       >

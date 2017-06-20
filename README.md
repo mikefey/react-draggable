@@ -43,11 +43,7 @@ import Draggable from 'react-draggable-component';
 **dragStartCallback {Function}** - A callback function for when the user starts dragging  
 **dragStopCallback {Function}** - A callback function for when the user stops dragging  
 **dragLeaveCallback {Function}** - A callback function for when the user is dragging and the mouse/touch leaves the draggable component  
-**initialPosition {Object}** - An object with initial x and y values for the content  
 **lock {String}** - An axis to lock element to when dragging, either 'x' or 'y'  
+**position {Object}** - An object with x and y values for the content
 **preventDefaultEvents {Boolean}** - Whether to prevent default mouse/touch events  
-**touchScrollLock {String}** - If set to true, prevents the content from being dragged if the user is scrolling in the opposite direction on a touch device  
-
-## methods
-**setPosition({Object})** - Sets the position of the component with an object passed in format {x: Number, y: number}  
-**getPosition()** - Gets the current x and y position of the component  
+**touchScrollLock {String}** - If set to true, prevents the content from being dragged if the user is scrolling in the opposite direction on a touch device

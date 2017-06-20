@@ -4,17 +4,12 @@ class Draggable extends React.Component {
   constructor(props) {
     super(props);
 
-    // used by React as the component name
-    this.displayName = 'Draggable';
-
-
     // if the component drag should take place
     this.doDrag = true;
 
-
     // initial state object
     this.state = {
-      pos: this.props.initialPosition || { x: 0, y: 0 },
+      pos: this.props.position || { x: 0, y: 0 },
       dragging: false,
       elementStyle: {
         position: this.props.cssPosition || 'absolute',
@@ -36,7 +31,6 @@ class Draggable extends React.Component {
     // bind functions to component
     this.renderChild = this.renderChild.bind(this);
     this.setPosition = this.setPosition.bind(this);
-    this.getPosition = this.getPosition.bind(this);
     this.positionContent = this.positionContent.bind(this);
     this.onDragStart = this.onDragStart.bind(this);
     this.onDrag = this.onDrag.bind(this);
@@ -50,7 +44,7 @@ class Draggable extends React.Component {
    * @returns {undefined} undefined
    */
   componentWillMount() {
-    if (this.props.initialPosition) {
+    if (this.props.position) {
       this.positionContent();
     }
   }
@@ -65,6 +59,21 @@ class Draggable extends React.Component {
     document.addEventListener('touchmove', this.onDrag);
     document.addEventListener('mouseup', this.onDragStop);
     document.addEventListener('touchend', this.onDragStop);
+  }
+
+
+  /**
+   * Called when component updates
+   * @returns {undefined} undefined
+   */
+  componentDidUpdate(prevProps) {
+    const position = this.props.position;
+
+    if (position &&
+      ((position.x !== prevProps.position.x) ||
+      (position.y !== prevProps.position.y))) {
+      this.setPosition({ x: position.x, y: position.y });
+    }
   }
 
 
@@ -85,8 +94,8 @@ class Draggable extends React.Component {
    * @returns {Object} React element
    */
   render() {
-    const additionalClass = this.props.additionalClass || '';
-    const className = 'component-draggable ' + additionalClass;
+    const classNameProp = this.props.className || '';
+    const className = `component-draggable ${classNameProp}`;
     const children = this.renderChild();
 
     return (
@@ -134,20 +143,6 @@ class Draggable extends React.Component {
 
 
   /**
-   * Sets the element's style
-   * @param {Object} style An object key/value style attributes
-   * @returns {undefined} undefined
-   */
-  setStyle(style) {
-    const newStyle = Object.assign(this.state.elementStyle, style);
-
-    this.setState({
-      elementStyle: newStyle,
-    });
-  }
-
-
-  /**
    * Positions the draggable element
    * @param {Object} pos - An object with x and y position values
    * @returns {undefined} undefined
@@ -156,15 +151,6 @@ class Draggable extends React.Component {
     this.setState({
       pos,
     }, this.positionContent);
-  }
-
-
-  /**
-   * Gets the draggable element position
-   * @returns {Object} pos - An object with x and y position values
-   */
-  getPosition() {
-    return this.state.pos;
   }
 
 
@@ -444,11 +430,11 @@ class Draggable extends React.Component {
 
 /**
  * Expected propTypes
- * @prop {String} additionalClass - A string of additional classnames to add
- * to the element
  * @prop {Object} bounds - An array of coordinates, forming a square, that the
  * user cannot drag the component outside of
  * @prop {Object} children - Child React elements
+ * @prop {String} className - A string of additional classnames to add
+ * to the element
  * @prop {String} cssPosition - The css positioning for for the element
  * (i.e. 'absolute' or 'fixed', defaults to 'absolute')
  * @prop {Boolean} disabled - If the component is disabled
@@ -460,8 +446,6 @@ class Draggable extends React.Component {
  * stops dragging
  * @prop {Function} dragLeaveCallback - A callback function for when the user
  * is dragging and the mouse/touch leaves the draggable component
- * @prop {Object} initialPosition - An object with initial x and y values for
- * the content
  * @prop {String} lock - An axis to lock element to when dragging, either
  * 'x' or 'y'
  * @prop {Boolean} preventDefaultEvents - Whether to prevent default
@@ -472,7 +456,6 @@ class Draggable extends React.Component {
  * device
  */
 Draggable.propTypes = {
-  additionalClass: React.PropTypes.string,
   bounds: React.PropTypes.shape({
     x1: React.PropTypes.number.isRequired,
     y1: React.PropTypes.number.isRequired,
@@ -483,14 +466,15 @@ Draggable.propTypes = {
     React.PropTypes.array,
     React.PropTypes.object,
   ]).isRequired,
+  className: React.PropTypes.string,
   cssPosition: React.PropTypes.string,
   disabled: React.PropTypes.bool,
   dragCallback: React.PropTypes.func,
   dragLeaveCallback: React.PropTypes.func,
   dragStartCallback: React.PropTypes.func,
   dragStopCallback: React.PropTypes.func,
-  initialPosition: React.PropTypes.object,
   lock: React.PropTypes.string,
+  position: React.PropTypes.object,
   preventDefaultEvents: React.PropTypes.bool,
   style: React.PropTypes.object,
   touchScrollLock: React.PropTypes.bool,
