@@ -70,8 +70,10 @@ class Draggable extends React.Component {
     const position = this.props.position;
 
     if (position &&
+      (!prevProps.position ||
+      (prevProps.position &&
       ((position.x !== prevProps.position.x) ||
-      (position.y !== prevProps.position.y))) {
+      (position.y !== prevProps.position.y))))) {
       this.setPosition({ x: position.x, y: position.y });
     }
   }
@@ -267,9 +269,9 @@ class Draggable extends React.Component {
    * @returns {undefined} undefined
    */
   positionContent() {
-    const xPos = this.state.pos.x + 'px';
-    const yPos = this.state.pos.y + 'px';
-    const positionTransformString = 'translate3d(' + xPos + ',' + yPos + ', 0px)';
+    const xPos = `${this.state.pos.x}px`;
+    const yPos = `${this.state.pos.y}px`;
+    const positionTransformString = `translate3d(${xPos},${yPos}, 0px)`;
     const transformStyle = {
       msTransform: positionTransformString,
       WebkitTransform: positionTransformString,
