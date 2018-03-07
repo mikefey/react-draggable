@@ -16,6 +16,9 @@
     "start": "npm run webpack-server & npm run web-server",
     "build": "NODE_ENV=production webpack -p --config webpack.production.config.js -d --display-reasons --display-chunks --progress"
   },
+  "peerDependencies": {
+    "react": ">=15"
+  },
   "devDependencies": {
     "autoprefixer": "^6.3.1",
     "babel": "^6.3.26",
@@ -61,5 +64,8 @@
     "url-loader": "^0.5.7",
     "webpack": "^1.12.12",
     "webpack-dev-server": "^1.14.1"
+  },
+  "dependencies": {
+    "prop-types": "^15.6.1"
   }
 }
