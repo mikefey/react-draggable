@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class Draggable extends React.Component {
   constructor(props) {
@@ -458,28 +459,28 @@ class Draggable extends React.Component {
  * device
  */
 Draggable.propTypes = {
-  bounds: React.PropTypes.shape({
-    x1: React.PropTypes.number.isRequired,
-    y1: React.PropTypes.number.isRequired,
-    x2: React.PropTypes.number.isRequired,
-    y2: React.PropTypes.number.isRequired,
+  bounds: PropTypes.shape({
+    x1: PropTypes.number.isRequired,
+    y1: PropTypes.number.isRequired,
+    x2: PropTypes.number.isRequired,
+    y2: PropTypes.number.isRequired,
   }),
-  children: React.PropTypes.oneOfType([
-    React.PropTypes.array,
-    React.PropTypes.object,
+  children: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object,
   ]).isRequired,
-  className: React.PropTypes.string,
-  cssPosition: React.PropTypes.string,
-  disabled: React.PropTypes.bool,
-  dragCallback: React.PropTypes.func,
-  dragLeaveCallback: React.PropTypes.func,
-  dragStartCallback: React.PropTypes.func,
-  dragStopCallback: React.PropTypes.func,
-  lock: React.PropTypes.string,
-  position: React.PropTypes.object,
-  preventDefaultEvents: React.PropTypes.bool,
-  style: React.PropTypes.object,
-  touchScrollLock: React.PropTypes.bool,
+  className: PropTypes.string,
+  cssPosition: PropTypes.string,
+  disabled: PropTypes.bool,
+  dragCallback: PropTypes.func,
+  dragLeaveCallback: PropTypes.func,
+  dragStartCallback: PropTypes.func,
+  dragStopCallback: PropTypes.func,
+  lock: PropTypes.string,
+  position: PropTypes.object,
+  preventDefaultEvents: PropTypes.bool,
+  style: PropTypes.object,
+  touchScrollLock: PropTypes.bool,
 };
 
 
