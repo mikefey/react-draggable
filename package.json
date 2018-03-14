@@ -1,6 +1,6 @@
 {
   "name": "react-draggable-component",
-  "version": "4.3.0",
+  "version": "4.4.0",
   "description": "A wrapper React component that adds draggable functionality to an element",
   "main": "index.js",
   "author": "Mike Fey",
