@@ -38,10 +38,16 @@ or
 yarn run build
 ```
 
+## requirements
+```react``` 
+```prop-types```
+
+
 ## usage
 ```
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import Draggable from 'react-draggable-component';
 
 <Draggable>
