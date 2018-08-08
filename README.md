@@ -5,10 +5,18 @@ A wrapper React component that adds draggable functionality to an element using 
 ```
 npm i react-draggable-component
 ```
+or
+```
+yarn add react-draggable-component
+```
 
 ## to run demo
 ```
 npm start
+```
+or
+```
+yarn start
 ```
 Then navigate to [http://localhost:3000/demo.html](http://localhost:3000/demo.html)
 
@@ -16,10 +24,18 @@ Then navigate to [http://localhost:3000/demo.html](http://localhost:3000/demo.ht
 ```
 npm test
 ```
+or
+```
+yarn test
+```
 
 ## to build
 ```
 npm run build
+```
+or
+```
+yarn run build
 ```
 
 ## usage
@@ -44,6 +60,6 @@ import Draggable from 'react-draggable-component';
 **dragStopCallback {Function}** - A callback function for when the user stops dragging  
 **dragLeaveCallback {Function}** - A callback function for when the user is dragging and the mouse/touch leaves the draggable component  
 **lock {String}** - An axis to lock element to when dragging, either 'x' or 'y'  
-**position {Object}** - An object with x and y values for the content
+**position {Object}** - An object with x and y values for the content  
 **preventDefaultEvents {Boolean}** - Whether to prevent default mouse/touch events  
 **touchScrollLock {String}** - If set to true, prevents the content from being dragged if the user is scrolling in the opposite direction on a touch device

@@ -1,5 +1,8 @@
 {
   "extends": "airbnb",
+  "env": {
+    "browser": true
+  },
   "ecmaFeatures": {
     "generators": true
   },
@@ -7,13 +10,21 @@
     "strict": 0,
     "jsx-quotes": 0,
     "no-else-return": 0,
+    "import/extensions": 0,
+    "import/no-extraneous-dependencies": 0,
+    "jsx-a11y/aria-role": 0,
+    "jsx-a11y/no-static-element-interactions": 0,
+    "react/forbid-prop-types": 0,
+    "react/jsx-filename-extension": 0,
     "react/no-did-update-set-state": 0,
     "react/prefer-es6-class": 0,
     "react/sort-comp": 0,
     "react/no-is-mounted": 0,
     "react/no-did-mount-set-state": 0,
     "func-names": 0,
+    "no-restricted-syntax": 0,
     "prefer-template": 0,
-    "generator-star-spacing": [2, {"before": true, "after": false}],
+    "generator-star-spacing": [2, {"before": true, "after": false}]
   }
 }
+  

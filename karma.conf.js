@@ -1,15 +1,21 @@
 // Karma configuration
 // Generated on Tue Feb 02 2016 16:16:23 GMT-0500 (EST)
+const karmaWebpack = require('karma-webpack');
+const karmaTap = require('karma-tap');
+const karmaEs6Shim = require('karma-es6-shim');
+const karmaChromeLauncher = require('karma-chrome-launcher');
+const karmaPhantomJsLauncher = require('karma-phantomjs-launcher');
+const karmaSourcemapLoader = require('karma-sourcemap-loader');
 
-module.exports = function(config) {
+module.exports = function (config) {
   config.set({
     plugins: [
-      require('karma-webpack'),
-      require('karma-tap'),
-      require('karma-es6-shim'),
-      require('karma-chrome-launcher'),
-      require('karma-phantomjs-launcher'),
-      require('karma-sourcemap-loader')
+      karmaWebpack,
+      karmaTap,
+      karmaEs6Shim,
+      karmaChromeLauncher,
+      karmaPhantomJsLauncher,
+      karmaSourcemapLoader,
     ],
 
 
@@ -19,25 +25,18 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: [ 'tap', 'es6-shim' ],
+    frameworks: ['tap', 'es6-shim'],
 
 
     // list of files / patterns to load in the browser
     files: [
       '__test__/tests.bundle.js',
       './node_modules/phantomjs-polyfill-object-assign/object-assign-polyfill.js',
-      {
-        pattern: '__test__/images/**/*.jpg',
-        watched: false,
-        included: false,
-        served: true,
-        nocache: false
-      },
     ],
 
 
     proxies: {
-      '/__test__/images': '/base/__test__/images'
+      '/__test__/images': '/base/__test__/images',
     },
 
 
@@ -49,35 +48,29 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      '__test__/tests.bundle.js': [ 'webpack', 'sourcemap' ]
+      '__test__/tests.bundle.js': ['webpack', 'sourcemap'],
     },
 
     webpack: {
       devtool: 'inline-source-map',
-      node : {
-        fs: 'empty'
+      mode: 'production',
+      performance: {
+        hints: false,
+      },
+      node: {
+        fs: 'empty',
       },
       module: {
-        loaders: [
+        rules: [
           {
             test: /\.jsx?$/,
             exclude: /(node_modules|bower_components)/,
             loaders: [
-              'react-hot',
-              'babel?presets[]=stage-0,presets[]=react,presets[]=es2015'
-            ]
-          }
-        ]
+              'babel-loader?presets[]=stage-0,presets[]=react,presets[]=es2015',
+            ],
+          },
+        ],
       },
-
-      webpackMiddleware: {
-        noInfo: true,
-      }
-    },
-
-
-    webpackMiddleware: {
-      noInfo: true
     },
 
 
@@ -96,7 +89,8 @@ module.exports = function(config) {
 
 
     // level of logging
-    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+    // possible values: config.LOG_DISABLE || config.LOG_ERROR ||
+    // config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
     logLevel: config.LOG_INFO,
 
 
@@ -115,6 +109,6 @@ module.exports = function(config) {
 
     // Concurrency level
     // how many browser should be started simultaneous
-    concurrency: Infinity
-  })
-}
+    concurrency: Infinity,
+  });
+};

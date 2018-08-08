@@ -8,14 +8,15 @@ class Draggable extends React.Component {
     // if the component drag should take place
     this.doDrag = true;
 
+    const { cssPosition, position } = this.props;
+
     // initial state object
     this.state = {
-      pos: this.props.position || { x: 0, y: 0 },
+      pos: position || { x: 0, y: 0 },
       dragging: false,
       elementStyle: {
-        position: this.props.cssPosition || 'absolute',
+        position: cssPosition || 'absolute',
       },
-      checkTimerStarted: false,
       scrollLocked: false,
       dragLocked: false,
       dragStartInputPos: {
@@ -45,7 +46,9 @@ class Draggable extends React.Component {
    * @returns {undefined} undefined
    */
   componentWillMount() {
-    if (this.props.position) {
+    const { position } = this.props;
+
+    if (position) {
       this.positionContent();
     }
   }
@@ -68,13 +71,13 @@ class Draggable extends React.Component {
    * @returns {undefined} undefined
    */
   componentDidUpdate(prevProps) {
-    const position = this.props.position;
+    const { position } = this.props;
 
-    if (position &&
-      (!prevProps.position ||
-      (prevProps.position &&
-      ((position.x !== prevProps.position.x) ||
-      (position.y !== prevProps.position.y))))) {
+    if (position
+      && (!prevProps.position
+      || (prevProps.position
+      && ((position.x !== prevProps.position.x)
+      || (position.y !== prevProps.position.y))))) {
       this.setPosition({ x: position.x, y: position.y });
     }
   }
@@ -97,17 +100,19 @@ class Draggable extends React.Component {
    * @returns {Object} React element
    */
   render() {
-    const classNameProp = this.props.className || '';
-    const className = `component-draggable ${classNameProp}`;
+    const { className } = this.props;
+    const classNameProp = className || '';
+    const newClassName = `component-draggable ${classNameProp}`;
     const children = this.renderChild();
 
     return (
       <div
-        className={className}
+        className={newClassName}
         onTouchStart={this.onDragStart}
         onTouchCancel={this.onDragLeave}
         onMouseDown={this.onDragStart}
         onDragLeave={this.onDragLeave}
+        role='draggableelement'
       >
         {children}
       </div>
@@ -121,21 +126,23 @@ class Draggable extends React.Component {
    */
   renderChild() {
     const inst = this;
+    const { children, style } = this.props;
+    const { elementStyle } = inst.state;
 
-    return React.Children.map(this.props.children, (child) => {
+    return React.Children.map(children, (child) => {
       let newStyle = {};
       let childStyle = {};
-      let elementStyle = {};
+      let newElementStyle = {};
 
       if (child.props && child.props.style) {
         childStyle = child.props.style;
       }
 
-      if (inst.state && inst.state.elementStyle) {
-        elementStyle = inst.state.elementStyle;
+      if (inst.state && elementStyle) {
+        newElementStyle = elementStyle;
       }
 
-      newStyle = Object.assign(childStyle, elementStyle, this.props.style);
+      newStyle = Object.assign(childStyle, newElementStyle, style);
 
       return React.cloneElement(child, {
         style: newStyle,
@@ -168,13 +175,16 @@ class Draggable extends React.Component {
    * @returns {undefined} undefined
    */
   setScrollLock(pageX, pageY) {
+    const { touchScrollLock, lock } = this.props;
+    const { dragLocked, pos, scrollLocked } = this.state;
+
     let difX = 0;
     let difY = 0;
 
-    if (this.props.touchScrollLock && (this.props.lock === 'x' ||
-      this.props.lock === 'y')) {
-      difY = (pageY - this.state.pos.y);
-      difX = (pageX - this.state.pos.x);
+    if (touchScrollLock && (lock === 'x'
+      || lock === 'y')) {
+      difY = (pageY - pos.y);
+      difX = (pageX - pos.x);
 
       if (difY < 0) {
         difY *= -1;
@@ -184,34 +194,27 @@ class Draggable extends React.Component {
         difX *= -1;
       }
 
-      if (this.props.lock === 'x') {
+      if (lock === 'x') {
         // if the content is locked to dragging horizontally
         if (difX > difY) {
           // if the user is intending to swipe horizontally
-          if (difX > 10 && !this.state.scrollLocked) {
+          if (difX > 10 && !scrollLocked) {
             this.doDrag = true;
             this.setState({ dragLocked: true });
           }
-        } else {
+        } else if (!dragLocked) {
           // if the user is intending to swipe vertically
-          if (!this.state.dragLocked) {
-            this.setState({ scrollLocked: true });
-          }
+          this.setState({ scrollLocked: true });
         }
-      } else {
+      } else if (difY > difX) {
         // if the content is locked to dragging vertically
-        if (difY > difX) {
-          // if the user is intending to swipe vertically
-          if (difY > 10 && !this.state.scrollLocked) {
-            this.doDrag = true;
-            this.setState({ dragLocked: true });
-          }
-        } else {
-          // if the user is intending to swipe horizontally
-          if (!this.state.dragLocked) {
-            this.setState({ scrollLocked: true });
-          }
+        // if the user is intending to swipe vertically
+        if (difY > 10 && !scrollLocked) {
+          this.doDrag = true;
+          this.setState({ dragLocked: true });
         }
+      } else if (!dragLocked) {
+        this.setState({ scrollLocked: true });
       }
     }
   }
@@ -224,41 +227,41 @@ class Draggable extends React.Component {
    * @returns {Object} The x and y coordinates to move the content to
    */
   getNewPosition(pageX, pageY) {
+    const { bounds, lock } = this.props;
+    const { dragStartElementPos, dragStartInputPos } = this.state;
     const newPos = {
-      x: this.state.dragStartElementPos.x +
-        (pageX - this.state.dragStartInputPos.x),
-      y: this.state.dragStartElementPos.y +
-        (pageY - this.state.dragStartInputPos.y),
+      x: dragStartElementPos.x + (pageX - dragStartInputPos.x),
+      y: dragStartElementPos.y + (pageY - dragStartInputPos.y),
     };
 
-    if (this.props.bounds) {
+    if (bounds) {
       // if the bounds were supplied, don't let the content move outside
       // of them
-      const bounds = this.props.bounds;
+      const newBounds = bounds;
 
-      if (newPos.x < bounds.x1) {
-        newPos.x = bounds.x1;
+      if (newPos.x < newBounds.x1) {
+        newPos.x = newBounds.x1;
       }
 
-      if (newPos.y < bounds.y1) {
-        newPos.y = bounds.y1;
+      if (newPos.y < newBounds.y1) {
+        newPos.y = newBounds.y1;
       }
 
-      if (newPos.x > bounds.x2) {
-        newPos.x = bounds.x2;
+      if (newPos.x > newBounds.x2) {
+        newPos.x = newBounds.x2;
       }
 
-      if (newPos.y > bounds.y2) {
-        newPos.y = bounds.y3;
+      if (newPos.y > newBounds.y2) {
+        newPos.y = newBounds.y3;
       }
     }
 
-    if (this.props.lock === 'x') {
-      newPos.y = this.state.dragStartElementPos.y;
+    if (lock === 'x') {
+      newPos.y = dragStartElementPos.y;
     }
 
-    if (this.props.lock === 'y') {
-      newPos.x = this.state.dragStartElementPos.x;
+    if (lock === 'y') {
+      newPos.x = dragStartElementPos.x;
     }
 
     return newPos;
@@ -270,8 +273,9 @@ class Draggable extends React.Component {
    * @returns {undefined} undefined
    */
   positionContent() {
-    const xPos = `${this.state.pos.x}px`;
-    const yPos = `${this.state.pos.y}px`;
+    const { elementStyle, pos } = this.state;
+    const xPos = `${pos.x}px`;
+    const yPos = `${pos.y}px`;
     const positionTransformString = `translate3d(${xPos},${yPos}, 0px)`;
     const transformStyle = {
       msTransform: positionTransformString,
@@ -279,7 +283,7 @@ class Draggable extends React.Component {
       MozTransform: positionTransformString,
       transform: positionTransformString,
     };
-    const newStyle = Object.assign(this.state.elementStyle, transformStyle);
+    const newStyle = Object.assign(elementStyle, transformStyle);
 
     this.setState({
       elementStyle: newStyle,
@@ -297,9 +301,11 @@ class Draggable extends React.Component {
    * @returns {undefined} undefined
    */
   onDragStart(e) {
+    const { disabled, dragStartCallback, preventDefaultEvents } = this.props;
+    const { pos } = this.state;
     this.mouseDownOnElement = true;
 
-    if (!this.props.disabled) {
+    if (!disabled) {
       let pageX = e.clientX;
       let pageY = e.clientY;
 
@@ -312,22 +318,21 @@ class Draggable extends React.Component {
 
       this.setState({
         scrollLocked: false,
-        checkTimerStarted: true,
         dragStartInputPos: {
           x: pageX,
           y: pageY,
         },
         dragStartElementPos: {
-          x: this.state.pos.x,
-          y: this.state.pos.y,
+          x: pos.x,
+          y: pos.y,
         },
       });
 
-      if (this.props.dragStartCallback) {
-        this.props.dragStartCallback(this.state.pos, e.target);
+      if (dragStartCallback) {
+        dragStartCallback(pos, e.target);
       }
 
-      if (this.props.preventDefaultEvents) {
+      if (preventDefaultEvents) {
         e.stopPropagation();
         e.preventDefault();
       }
@@ -343,7 +348,10 @@ class Draggable extends React.Component {
    * @returns {undefined} undefined
    */
   onDrag(e) {
-    if (this.mouseDownOnElement && !this.props.disabled) {
+    const { disabled, dragCallback, preventDefaultEvents } = this.props;
+    const { scrollLocked } = this.state;
+
+    if (this.mouseDownOnElement && !disabled) {
       let pageX = e.clientX;
       let pageY = e.clientY;
 
@@ -354,7 +362,7 @@ class Draggable extends React.Component {
 
       this.setScrollLock(pageX, pageY);
 
-      if (this.doDrag && !this.state.scrollLocked) {
+      if (this.doDrag && !scrollLocked) {
         this.doDrag = false;
 
         const newPos = this.getNewPosition(pageX, pageY);
@@ -366,13 +374,13 @@ class Draggable extends React.Component {
           this.positionContent();
         });
 
-        if (this.props.dragCallback) {
-          this.props.dragCallback(newPos, event.target);
+        if (dragCallback) {
+          dragCallback(newPos, e.target);
         }
       }
     }
 
-    if (this.props.preventDefaultEvents) {
+    if (preventDefaultEvents) {
       e.stopPropagation();
       e.preventDefault();
     }
@@ -385,13 +393,14 @@ class Draggable extends React.Component {
    * @returns {undefined} undefined
    */
   onDragStop(e) {
-    if (this.mouseDownOnElement &&
-      !this.props.disabled &&
-      !this.mouseDownWhileDisabled) {
-      if (this.props.dragStopCallback && !this.state.scrollLocked) {
-        this.props.dragStopCallback({
-          x: this.state.pos.x,
-          y: this.state.pos.y,
+    const { disabled, dragStopCallback, preventDefaultEvents } = this.props;
+    const { pos, scrollLocked } = this.state;
+
+    if (this.mouseDownOnElement && !disabled && !this.mouseDownWhileDisabled) {
+      if (dragStopCallback && !scrollLocked) {
+        dragStopCallback({
+          x: pos.x,
+          y: pos.y,
         }, e.target);
       }
 
@@ -401,7 +410,7 @@ class Draggable extends React.Component {
         dragLocked: false,
       });
 
-      if (this.props.preventDefaultEvents) {
+      if (preventDefaultEvents) {
         e.stopPropagation();
         e.preventDefault();
       }
@@ -417,18 +426,37 @@ class Draggable extends React.Component {
    * @returns {undefined} undefined
    */
   onDragLeave() {
-    if (this.state.dragging) {
+    const { dragLeaveCallback } = this.props;
+    const { dragging } = this.state;
+
+    if (dragging) {
       this.setState({
         scrollLocked: false,
         dragLocked: false,
       });
 
-      if (this.props.dragLeaveCallback) {
-        this.props.dragLeaveCallback();
+      if (dragLeaveCallback) {
+        dragLeaveCallback();
       }
     }
   }
 }
+
+Draggable.defaultProps = {
+  bounds: null,
+  className: null,
+  cssPosition: null,
+  disabled: false,
+  dragCallback: null,
+  dragLeaveCallback: null,
+  dragStartCallback: null,
+  dragStopCallback: null,
+  lock: null,
+  position: null,
+  preventDefaultEvents: false,
+  style: null,
+  touchScrollLock: false,
+};
 
 
 /**

@@ -1,9 +1,9 @@
-
-import './../../css/src/main.scss';
-
-import Draggable from './components/Draggable.jsx';
+/* eslint-disable import/extensions */
+/* eslint-disable react/jsx-filename-extension */
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Draggable from './components/Draggable.jsx';
+import '../../css/src/main.scss';
 
 
 /**
@@ -33,8 +33,10 @@ domReady(() => {
 
   ReactDOM.render(
     <Draggable>
-      <div className='draggable-content'>DRAG</div>
-    </Draggable>
-
-    , appContainer);
+      <div className='draggable-content'>
+        DRAG
+      </div>
+    </Draggable>,
+    appContainer,
+  );
 });

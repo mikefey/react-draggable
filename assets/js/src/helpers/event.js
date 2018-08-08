@@ -36,7 +36,7 @@ const eventHelper = {
       e.keyCode = kc;
     }
 
-    if (typeof(document.createEvent) === 'function') {
+    if (typeof (document.createEvent) === 'function') {
       evt = document.createEvent(ifc);
 
       if (ifc === 'MouseEvents') {
@@ -48,7 +48,6 @@ const eventHelper = {
       }
 
       if (ifc === 'KeyboardEvents') {
-        console.log('as;dlfkjas;flkjasld;fjk')
         evt.initEvent(type,
           e.bubbles,
           e.cancelable,
