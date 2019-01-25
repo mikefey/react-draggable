@@ -18,10 +18,12 @@ module.exports = {
     filename: 'assets/js/build/demo.js',
   },
   devtool: 'eval',
+  mode: 'development',
   module: {
     rules: [
       {
         test: /\.jsx?$/,
+        enforce: 'pre',
         exclude: /(node_modules|bower_components)/,
         loader: 'source-map-loader',
       },
@@ -31,7 +33,6 @@ module.exports = {
         loaders: [
           'style-loader',
           'css-loader',
-          'postcss-loader',
           'sass-loader?outputStyle=expanded',
         ],
       },
@@ -46,6 +47,7 @@ module.exports = {
         test: /\.jsx?$/,
         exclude: /(node_modules|bower_components)/,
         loaders: [
+          'react-hot-loader/webpack',
           'babel-loader?presets[]=stage-0,presets[]=react,presets[]=es2015',
         ],
       },

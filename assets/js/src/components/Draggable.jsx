@@ -67,7 +67,8 @@ class Draggable extends React.Component {
 
 
   /**
-   * Called when component updates
+   * Called when component updates, checks if the position prop was set
+   * and positions the content accordingly
    * @returns {undefined} undefined
    */
   componentDidUpdate(prevProps) {
@@ -75,9 +76,8 @@ class Draggable extends React.Component {
 
     if (position
       && (!prevProps.position
-      || (prevProps.position
-      && ((position.x !== prevProps.position.x)
-      || (position.y !== prevProps.position.y))))) {
+        || (prevProps.position && ((position.x !== prevProps.position.x)
+          || (position.y !== prevProps.position.y))))) {
       this.setPosition({ x: position.x, y: position.y });
     }
   }
@@ -146,7 +146,6 @@ class Draggable extends React.Component {
 
       return React.cloneElement(child, {
         style: newStyle,
-        ref: 'draggableChild',
       });
     });
   }
@@ -165,11 +164,7 @@ class Draggable extends React.Component {
 
 
   /**
-   * If the 'touchScrollLock' prop is set to true, and dragging is locked
-   * to the 'x' or 'y' axis, and the user is dragging
-   * (or scrolling on mobile) on the opposite axis, stop any dragging.
-   * This is so the content doesn't move when a user is scrolling on a
-   * mobile device.
+   * This is so the content doesn't move when scrolling on a mobile device.
    * @param {Number} pageX - The x position of mouse or touch event
    * @param {Number} pageY - The y position of mouse or touch event
    * @returns {undefined} undefined
@@ -197,18 +192,18 @@ class Draggable extends React.Component {
       if (lock === 'x') {
         // if the content is locked to dragging horizontally
         if (difX > difY) {
-          // if the user is intending to swipe horizontally
+          // if intending to swipe horizontally
           if (difX > 10 && !scrollLocked) {
             this.doDrag = true;
             this.setState({ dragLocked: true });
           }
         } else if (!dragLocked) {
-          // if the user is intending to swipe vertically
+          // if intending to swipe vertically
           this.setState({ scrollLocked: true });
         }
       } else if (difY > difX) {
         // if the content is locked to dragging vertically
-        // if the user is intending to swipe vertically
+        // if intending to swipe vertically
         if (difY > 10 && !scrollLocked) {
           this.doDrag = true;
           this.setState({ dragLocked: true });
@@ -296,7 +291,7 @@ class Draggable extends React.Component {
 
 
   /**
-   * Called when the user's mouse is pressed
+   * Called when the mouse is pressed
    * @param {Event} e A mousedown event
    * @returns {undefined} undefined
    */
@@ -343,7 +338,7 @@ class Draggable extends React.Component {
 
 
   /**
-   * Called when the user's mouse is moved
+   * Called when the mouse is moved
    * @param {Event} e A mousemove event
    * @returns {undefined} undefined
    */
@@ -388,7 +383,7 @@ class Draggable extends React.Component {
 
 
   /**
-   * Called when the user's mouse is released
+   * Called when the mouse is released
    * @param {Event} e A mouseup event
    * @returns {undefined} undefined
    */
@@ -421,7 +416,7 @@ class Draggable extends React.Component {
 
 
   /**
-   * Called when the user is dragging but releases the mouse
+   * Called when dragging but releases the mouse
    * outside of the draggable component
    * @returns {undefined} undefined
    */
@@ -462,29 +457,24 @@ Draggable.defaultProps = {
 /**
  * Expected propTypes
  * @prop {Object} bounds - An array of coordinates, forming a square, that the
- * user cannot drag the component outside of
+ *    component can't be dragged outside of
  * @prop {Object} children - Child React elements
  * @prop {String} className - A string of additional classnames to add
- * to the element
+ *    to the element
  * @prop {String} cssPosition - The css positioning for for the element
- * (i.e. 'absolute' or 'fixed', defaults to 'absolute')
+ *    (i.e. 'absolute' or 'fixed', defaults to 'absolute')
  * @prop {Boolean} disabled - If the component is disabled
- * @prop {Function} dragCallback - A callback function while the user is
- * dragging
- * @prop {Function} dragStartCallback - A callback function for when the user
- * stops dragging
- * @prop {Function} dragStopCallback - A callback function for when the user
- * stops dragging
- * @prop {Function} dragLeaveCallback - A callback function for when the user
- * is dragging and the mouse/touch leaves the draggable component
- * @prop {String} lock - An axis to lock element to when dragging, either
- * 'x' or 'y'
+ * @prop {Function} dragCallback - A callback function that fires while dragging
+ * @prop {Function} dragStartCallback - A callback function that fires when dragging starts
+ * @prop {Function} dragStopCallback - A callback function that fires when dragging stops
+ * @prop {Function} dragLeaveCallback - A callback function that fires when the mouse/touch
+ *    leaves the draggable component while dragging
+ * @prop {String} lock - An axis to lock element to when dragging, either 'x' or 'y'
  * @prop {Boolean} preventDefaultEvents - Whether to prevent default
  * mouse/touch events
  * @prop {Object} style - A style object
  * @prop {String} touchScrollLock - If set to true, prevents the content from
- * being dragged if the user is scrolling in the opposite direction on a touch
- * device
+ *    being dragged while scrolling in the opposite direction on a touch device
  */
 Draggable.propTypes = {
   bounds: PropTypes.shape({

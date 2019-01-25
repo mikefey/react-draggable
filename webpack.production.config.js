@@ -1,11 +1,7 @@
-const path = require('path');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-
 module.exports = {
-  mode: 'production',
-  entry: path.join(__dirname, '/assets/js/src/main.js'),
+  entry: './assets/js/src/main.js',
   output: {
-    path: path.join(__dirname, 'assets/js/lib/'),
+    path: `${__dirname}/assets/js/build/`,
     filename: 'react-draggable.build.js',
     libraryTarget: 'umd',
     library: 'ReactDraggable',
@@ -16,8 +12,31 @@ module.exports = {
     'prop-types': 'prop-types',
   }],
   devtool: 'eval',
+  mode: 'production',
   module: {
     rules: [
+      {
+        test: /\.jsx?$/,
+        enforce: 'pre',
+        exclude: /(node_modules|bower_components)/,
+        loader: 'source-map-loader',
+      },
+      {
+        test: /\.scss$/,
+        include: /src/,
+        loaders: [
+          'style-loader',
+          'css-loader',
+          'sass-loader?outputStyle=expanded',
+        ],
+      },
+      {
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        loaders: [
+          'url-loader?limit=8192',
+          'img-loader',
+        ],
+      },
       {
         test: /\.jsx?$/,
         exclude: /(node_modules|bower_components)/,
@@ -25,12 +44,6 @@ module.exports = {
           'babel-loader?presets[]=stage-0,presets[]=react,presets[]=es2015',
         ],
       },
-    ],
-  },
-  optimization: {
-    minimize: true,
-    minimizer: [
-      new UglifyJsPlugin(),
     ],
   },
 };

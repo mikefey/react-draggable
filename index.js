@@ -1,1 +1,1 @@
-module.exports = require('./assets/js/lib/react-draggable.build.js');
+module.exports = require('./assets/js/build/react-draggable.build.js');

@@ -37,6 +37,5 @@ domReady(() => {
         DRAG
       </div>
     </Draggable>,
-    appContainer,
-  );
+    appContainer);
 });
